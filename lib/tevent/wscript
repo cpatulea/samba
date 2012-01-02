@@ -5,7 +5,7 @@ VERSION = '0.9.15'
 
 blddir = 'bin'
 
-import sys, os, Utils
+import sys, os
 
 # find the buildtools directory
 srcdir = '.'
@@ -44,6 +44,10 @@ def configure(conf):
     if conf.CHECK_FUNCS('epoll_create', headers='sys/epoll.h'):
         conf.DEFINE('HAVE_EPOLL', 1)
 
+    conf.check_cfg(package='glib-2.0', atleast_version='2.24.0',
+                   args='--cflags --libs')
+    conf.CHECK_FUNCS_IN('g_main_context_new', 'glib-2.0', headers='glib.h')
+
     conf.env.disable_python = getattr(Options.options, 'disable_python', False)
 
     if not conf.env.disable_python:
@@ -67,11 +71,15 @@ def build(bld):
     SRC = '''tevent.c tevent_debug.c tevent_fd.c tevent_immediate.c
              tevent_queue.c tevent_req.c tevent_select.c
          tevent_poll.c
-             tevent_signal.c tevent_standard.c tevent_timed.c tevent_util.c tevent_wakeup.c
-             tevent_glib.c'''
+             tevent_signal.c tevent_standard.c tevent_timed.c tevent_util.c tevent_wakeup.c'''
+    deps = 'replace talloc'
 
     if bld.CONFIG_SET('HAVE_EPOLL'):
         SRC += ' tevent_epoll.c'
+
+    if bld.CONFIG_SET('HAVE_GLIB_2_0'):
+        SRC += ' tevent_glib.c'
+        deps += ' glib-2.0'
 
     if bld.env.standalone_tevent:
         bld.env.PKGCONFIGDIR = '${LIBDIR}/pkgconfig'
@@ -82,7 +90,7 @@ def build(bld):
     if not bld.CONFIG_SET('USING_SYSTEM_TEVENT'):
         bld.SAMBA_LIBRARY('tevent',
                           SRC,
-                          deps='replace talloc',
+                          deps=deps,
                           enabled= not bld.CONFIG_SET('USING_SYSTEM_TEVENT'),
                           includes='.',
                           abi_directory='ABI',
@@ -91,10 +99,7 @@ def build(bld):
                           public_headers='tevent.h',
                           public_headers_install=not private_library,
                           pc_files='tevent.pc',
-                          private_library=private_library,
-                          # XXX: what is the 'waf' way to do this?
-                          cflags=Utils.cmd_output("pkg-config --cflags gio-2.0"),
-                          ldflags=Utils.cmd_output("pkg-config --libs gio-2.0"))
+                          private_library=private_library)
 
     if not bld.CONFIG_SET('USING_SYSTEM_PYTEVENT'):
         bld.SAMBA_PYTHON('pytevent',

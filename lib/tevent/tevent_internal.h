@@ -314,4 +314,6 @@ bool tevent_poll_init(void);
 #ifdef HAVE_EPOLL
 bool tevent_epoll_init(void);
 #endif
+#ifdef HAVE_GLIB_2_0
 bool tevent_glib_init(void);
+#endif

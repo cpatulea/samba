@@ -118,7 +118,9 @@ static void tevent_backend_init(void)
 #ifdef HAVE_EPOLL
 	tevent_epoll_init();
 #endif
+#ifdef HAVE_GLIB_2_0
 	tevent_glib_init();
+#endif
 }
 
 /*
