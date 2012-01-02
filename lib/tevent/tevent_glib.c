@@ -3,11 +3,7 @@
 
    main select loop and event handling - glib implementation
 
-   Based on tevent_epoll.c, which are:
-	   Copyright (C) Andrew Tridgell	2003-2005
-	   Copyright (C) Stefan Metzmacher	2005-2009
-   Glib-specific code is:
-	   Copyright (C) Catalin Patulea	2012
+   Copyright (C) Catalin Patulea	2012
 
      ** NOTE! The following LGPL license applies to the tevent
      ** library. This does NOT imply that all of Samba is released
@@ -84,7 +80,6 @@ static int glib_ctx_destructor(struct glib_event_context *glib_ev);
 /* create a glib_event_context structure */
 static int glib_event_context_init(struct tevent_context *ev)
 {
-	int ret;
 	struct glib_event_context *glib_ev;
 
 	glib_ev = talloc(ev, struct glib_event_context);
