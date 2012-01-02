@@ -63,7 +63,7 @@ struct tevent_context *s4_event_context_init(TALLOC_CTX *mem_ctx)
 {
 	struct tevent_context *ev;
 
-	ev = tevent_context_init_byname(mem_ctx, NULL);
+	ev = tevent_context_init_byname(mem_ctx, "glib");
 	if (ev) {
 		tevent_set_debug(ev, ev_wrap_debug, NULL);
 		tevent_loop_allow_nesting(ev);

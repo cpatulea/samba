@@ -279,6 +279,7 @@ void tevent_common_fd_set_close_fn(struct tevent_fd *fde,
 uint16_t tevent_common_fd_get_flags(struct tevent_fd *fde);
 void tevent_common_fd_set_flags(struct tevent_fd *fde, uint16_t flags);
 
+int tevent_common_timed_destructor(struct tevent_timer *te);
 struct tevent_timer *tevent_common_add_timer(struct tevent_context *ev,
 					     TALLOC_CTX *mem_ctx,
 					     struct timeval next_event,
@@ -313,3 +314,4 @@ bool tevent_poll_init(void);
 #ifdef HAVE_EPOLL
 bool tevent_epoll_init(void);
 #endif
+bool tevent_glib_init(void);

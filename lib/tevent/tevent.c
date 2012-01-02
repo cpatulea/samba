@@ -118,6 +118,7 @@ static void tevent_backend_init(void)
 #ifdef HAVE_EPOLL
 	tevent_epoll_init();
 #endif
+	tevent_glib_init();
 }
 
 /*

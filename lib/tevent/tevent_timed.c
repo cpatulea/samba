@@ -131,7 +131,7 @@ struct timeval tevent_timeval_current_ofs(uint32_t secs, uint32_t usecs)
 /*
   destroy a timed event
 */
-static int tevent_common_timed_destructor(struct tevent_timer *te)
+int tevent_common_timed_destructor(struct tevent_timer *te)
 {
 	tevent_debug(te->event_ctx, TEVENT_DEBUG_TRACE,
 		     "Destroying timer event %p \"%s\"\n",
